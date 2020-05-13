@@ -43,7 +43,7 @@ public class LauncherDiscord {
 		this.config = config;
 
 		log.info("[DiscordRPC] initializing.");
-		client = new IPCClient(425297966069317632L);
+		client = new IPCClient(709790494020075551L);
 
 		client.setListener(new IPCListener() {
 			@Override
