@@ -28,7 +28,7 @@ public class Configuration {
     private boolean offlineModeEnabled = false;
     private String offlineModePlayerName;
     private String jvmPath;
-    private String jvmArgs;
+    private String jvmArgs = "-Dfile.encoding=utf-8";
     private int minMemory = 1024;
     private int maxMemory = 0; // Updated in Launcher
     private int permGen = 256;
