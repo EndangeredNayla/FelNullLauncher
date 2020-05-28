@@ -57,6 +57,7 @@ import net.teamfruit.skcraft.launcher.dirs.OptionLauncherDirectories;
 import net.teamfruit.skcraft.launcher.discordrpc.DiscordStatus;
 import net.teamfruit.skcraft.launcher.discordrpc.LauncherStatus;
 import net.teamfruit.skcraft.launcher.discordrpc.LauncherStatus.WindowDisablable;
+import net.teamfruit.skcraft.launcher.i18n.LanguageDialog;
 import net.teamfruit.skcraft.launcher.skins.LocalSkin;
 import net.teamfruit.skcraft.launcher.skins.Skin;
 
@@ -109,6 +110,7 @@ public class ConfigurationDialog extends JDialog {
 	private final JButton cancelButton = new JButton(SharedLocale.tr("button.cancel"));
 	private final JButton aboutButton = new JButton(SharedLocale.tr("options.about"));
 	private final JButton logButton = new JButton(SharedLocale.tr("options.launcherConsole"));
+	private final JButton languageButton = new JButton(SharedLocale.tr("options.lang"));
 
 	private final JCheckBox moveFilesCheck = new JCheckBox(SharedLocale.tr("options.moveFiles"), true);
 
@@ -247,6 +249,7 @@ public class ConfigurationDialog extends JDialog {
 
 		buttonsPanel.addElement(logButton);
 		buttonsPanel.addElement(aboutButton);
+		buttonsPanel.addElement(languageButton);
 		buttonsPanel.addGlue();
 		buttonsPanel.addElement(okButton);
 		buttonsPanel.addElement(cancelButton);
@@ -269,7 +272,12 @@ public class ConfigurationDialog extends JDialog {
 				AboutDialog.showAboutDialog(ConfigurationDialog.this);
 			}
 		});
-
+		languageButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LanguageDialog.showLanguageDialog(ConfigurationDialog.this, launcher);
+			}
+		});
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -294,14 +302,18 @@ public class ConfigurationDialog extends JDialog {
 		pathCommonDataDirButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new DirectorySelectionDialog(ConfigurationDialog.this, launcher.getDirectories(), pathCommonDataDirText, SharedLocale.tr("options.pathCommonDataDirTitle"), launcherDirs.getDefaultCommonDataDir(), null).setVisible(true);
+				new DirectorySelectionDialog(ConfigurationDialog.this, launcher.getDirectories(), pathCommonDataDirText,
+						SharedLocale.tr("options.pathCommonDataDirTitle"), launcherDirs.getDefaultCommonDataDir(), null)
+								.setVisible(true);
 			}
 		});
 
 		pathInstancesDirButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new DirectorySelectionDialog(ConfigurationDialog.this, launcher.getDirectories(), pathInstancesDirText, SharedLocale.tr("options.pathInstancesDirTitle"), launcherDirs.getDefaultInstancesDir(), "instances").setVisible(true);
+				new DirectorySelectionDialog(ConfigurationDialog.this, launcher.getDirectories(), pathInstancesDirText,
+						SharedLocale.tr("options.pathInstancesDirTitle"), launcherDirs.getDefaultInstancesDir(),
+						"instances").setVisible(true);
 			}
 		});
 
@@ -313,18 +325,18 @@ public class ConfigurationDialog extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					String runid = secretKeyText.getText();
 					Instance runinstance = null;
-					for (Instance instance: launcher.getInstances().getInstancesSecret())
+					for (Instance instance : launcher.getInstances().getInstancesSecret())
 						if (StringUtils.equalsIgnoreCase(runid, instance.getKey())) {
 							runinstance = instance;
 							break;
 						}
-					if (runinstance!=null) {
+					if (runinstance != null) {
 						dispose();
-						log.info("Launching "+runinstance.getName());
+						log.info("Launching " + runinstance.getName());
 						frame.loadInstances();
 						frame.launch(runinstance);
 					} else {
-						log.warning("Unable to find "+runid);
+						log.warning("Unable to find " + runid);
 						SwingHelper.showErrorDialog(frame,
 								SharedLocale.tr("errors.missingInstance", runid),
 								SharedLocale.tr("errors.missingInstanceTitle", runid));
@@ -334,13 +346,14 @@ public class ConfigurationDialog extends JDialog {
 		} else
 			secretUnlockButton.setEnabled(false);
 
-		LauncherStatus.instance.open(DiscordStatus.CONFIG, new WindowDisablable(this), ImmutableMap.<String, String>of());
+		LauncherStatus.instance.open(DiscordStatus.CONFIG, new WindowDisablable(this),
+				ImmutableMap.<String, String> of());
 
-        addWindowListener(new WindowAdapter() {
-        	@Override
-        	public void windowActivated(WindowEvent e) {
-        		LauncherStatus.instance.update();
-        	}
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				LauncherStatus.instance.update();
+			}
 		});
 	}
 
@@ -396,11 +409,9 @@ public class ConfigurationDialog extends JDialog {
 		File instancesDirDest = DirectoryUtils.tryCanonical(launcherDirs.getInstancesDir());
 
 		if (!commonDataDirSrc.equals(commonDataDirDest))
-			if (
-				!(DirectoryUtils.checkMovable(this, commonAssetsDirSrc, commonAssetsDirDest)
-						&&DirectoryUtils.checkMovable(this, commonLibrariesDirSrc, commonLibrariesDirDest)
-						&&DirectoryUtils.checkMovable(this, commonVersionsDirSrc, commonVersionsDirDest))
-			)
+			if (!(DirectoryUtils.checkMovable(this, commonAssetsDirSrc, commonAssetsDirDest)
+					&& DirectoryUtils.checkMovable(this, commonLibrariesDirSrc, commonLibrariesDirDest)
+					&& DirectoryUtils.checkMovable(this, commonVersionsDirSrc, commonVersionsDirDest)))
 				return;
 		if (!instancesDirSrc.equals(instancesDirDest))
 			if (!(DirectoryUtils.checkMovable(this, instancesDirSrc, instancesDirDest)))
@@ -409,14 +420,14 @@ public class ConfigurationDialog extends JDialog {
 		DirectoryTasks tasks = new DirectoryTasks(launcher);
 		List<ObservableFuture<File>> futures = Lists.newArrayList();
 		if (!commonDataDirSrc.equals(commonDataDirDest)) {
-			if (!commonAssetsDirSrc.equals(commonAssetsDirDest)&&commonAssetsDirSrc.isDirectory())
+			if (!commonAssetsDirSrc.equals(commonAssetsDirDest) && commonAssetsDirSrc.isDirectory())
 				futures.add(tasks.move(this, commonAssetsDirSrc, commonAssetsDirDest));
-			if (!commonLibrariesDirSrc.equals(commonLibrariesDirDest)&&commonLibrariesDirSrc.isDirectory())
+			if (!commonLibrariesDirSrc.equals(commonLibrariesDirDest) && commonLibrariesDirSrc.isDirectory())
 				futures.add(tasks.move(this, commonLibrariesDirSrc, commonLibrariesDirDest));
-			if (!commonVersionsDirSrc.equals(commonVersionsDirDest)&&commonVersionsDirSrc.isDirectory())
+			if (!commonVersionsDirSrc.equals(commonVersionsDirDest) && commonVersionsDirSrc.isDirectory())
 				futures.add(tasks.move(this, commonVersionsDirSrc, commonVersionsDirDest));
 		}
-		if (!instancesDirSrc.equals(instancesDirDest)&&instancesDirSrc.isDirectory())
+		if (!instancesDirSrc.equals(instancesDirDest) && instancesDirSrc.isDirectory())
 			futures.add(tasks.move(this, instancesDirSrc, instancesDirDest));
 
 		Futures.addCallback(Futures.allAsList(futures), new FutureCallback<List<File>>() {

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import net.teamfruit.skcraft.launcher.dirs.OptionLauncherDirectories;
+import net.teamfruit.skcraft.launcher.i18n.Lang;
 
 /**
  * The configuration for the launcher.
@@ -24,38 +25,40 @@ import net.teamfruit.skcraft.launcher.dirs.OptionLauncherDirectories;
 public class Configuration {
 
 	private String skin;
-    private boolean offlineEnabled = false;
-    private boolean offlineModeEnabled = false;
-    private String offlineModePlayerName;
-    private String jvmPath;
-    private String jvmArgs = "-Dfile.encoding=utf-8";
-    private int minMemory = 1024;
-    private int maxMemory = 0; // Updated in Launcher
-    private int permGen = 256;
-    private boolean showConsole = true;
-    private int windowWidth = 854;
-    private int widowHeight = 480;
-    private boolean proxyEnabled = false;
-    private String proxyHost = "localhost";
-    private int proxyPort = 8080;
-    private String proxyUsername;
-    private String proxyPassword;
-    private String gameKey;
-    private boolean serverEnabled = false;
-    private String serverHost;
-    private int serverPort = 25565;
-    private boolean discordPing = true;
-    private String pathCommonDataDir = OptionLauncherDirectories.DefaultPathCommonDataDir;
-    private String pathInstancesDir = OptionLauncherDirectories.DefaultPathInstancesDir;
+	private boolean offlineEnabled = false;
+	private boolean offlineModeEnabled = false;
+	private String offlineModePlayerName;
+	private String jvmPath;
+	private String jvmArgs = "-Dfile.encoding=utf-8";
+	private int minMemory = 1024;
+	private int maxMemory = 0; // Updated in Launcher
+	private int permGen = 256;
+	private boolean showConsole = true;
+	private int windowWidth = 854;
+	private int widowHeight = 480;
+	private boolean proxyEnabled = false;
+	private String proxyHost = "localhost";
+	private int proxyPort = 8080;
+	private String proxyUsername;
+	private String proxyPassword;
+	private String gameKey;
+	private boolean serverEnabled = false;
+	private String serverHost;
+	private int serverPort = 25565;
+	private boolean discordPing = true;
+	private String pathCommonDataDir = OptionLauncherDirectories.DefaultPathCommonDataDir;
+	private String pathInstancesDir = OptionLauncherDirectories.DefaultPathInstancesDir;
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
+	private String lang = Lang.JAPANESE.getName();
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 
 }
