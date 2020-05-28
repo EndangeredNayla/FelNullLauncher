@@ -332,7 +332,7 @@ public class LauncherFrame extends JFrame {
         SwingHelper.removeOpaqueness(instanceScroll);
         rightPane.setOpaque(false);
         this.splitPane.add(leftPane, BorderLayout.CENTER);
-        this.splitPane.add(rightPane, BorderLayout.EAST);
+        this.splitPane.add(rightPane, BorderLayout.WEST);
         this.splitPane.setOpaque(false);
 
         expandButton.addActionListener(new ActionListener() {

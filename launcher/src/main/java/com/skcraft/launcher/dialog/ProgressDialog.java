@@ -48,230 +48,236 @@ import net.teamfruit.skcraft.launcher.swing.TipsPanel;
 @Log
 public class ProgressDialog extends JDialog {
 
-    private static WeakReference<ProgressDialog> lastDialogRef;
+	private static WeakReference<ProgressDialog> lastDialogRef;
 
-    private final String defaultTitle;
-    private final String defaultMessage;
-    private final JLabel label = new JLabel();
-    private final JPanel mainPanel = new JPanel(new BorderLayout());
-    private final JPanel progressPanel = new JPanel(new BorderLayout(0, 5));
-    private final JPanel textAreaPanel = new JPanel(new BorderLayout());
-    private final JProgressBar progressBar = new JProgressBar();
-    private final LinedBoxPanel buttonsPanel = new LinedBoxPanel(true);
-    private final JTextArea logText = new JTextArea();
-    private final JScrollPane logScroll = new JScrollPane(logText);
-    private final JButton detailsButton = new JButton();
-    private final JButton logButton = new JButton(SharedLocale.tr("progress.viewLog"));
-    private final JButton cancelButton = new JButton(SharedLocale.tr("button.cancel"));
+	private final String defaultTitle;
+	private final String defaultMessage;
+	private final JLabel label = new JLabel();
+	private final JPanel mainPanel = new JPanel(new BorderLayout());
+	private final JPanel progressPanel = new JPanel(new BorderLayout(0, 5));
+	private final JPanel textAreaPanel = new JPanel(new BorderLayout());
+	private final JProgressBar progressBar = new JProgressBar();
+	private final LinedBoxPanel buttonsPanel = new LinedBoxPanel(true);
+	private final JTextArea logText = new JTextArea();
+	private final JScrollPane logScroll = new JScrollPane(logText);
+	private final JButton detailsButton = new JButton();
+	private final JButton logButton = new JButton(SharedLocale.tr("progress.viewLog"));
+	private final JButton cancelButton = new JButton(SharedLocale.tr("button.cancel"));
 
-    public ProgressDialog(Window owner, String title, String message) {
-        super(owner, title, ModalityType.DOCUMENT_MODAL);
+	public ProgressDialog(Window owner, String title, String message) {
+		super(owner, title, ModalityType.DOCUMENT_MODAL);
 
-        setResizable(false);
-        initComponents();
-        label.setText(message);
-        defaultTitle = title;
-        defaultMessage = message;
-        setCompactSize();
-        pack();
-        setLocationRelativeTo(owner);
-
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent event) {
-                if (confirmCancel()) {
-                    cancel();
-                    dispose();
-                }
-            }
-        });
-    }
-
-    private void setCompactSize() {
-        detailsButton.setText(SharedLocale.tr("progress.details"));
-        logButton.setVisible(false);
-        revalidate();
-    }
-
-    private void setDetailsSize() {
-        detailsButton.setText(SharedLocale.tr("progress.less"));
-        logButton.setVisible(true);
-        revalidate();
-        pack();
-    }
-
-    private void initComponents() {
-        progressBar.setMaximum(1000);
-        progressBar.setMinimum(0);
-        progressBar.setIndeterminate(true);
-        progressBar.setPreferredSize(new Dimension(350, 18));
-
-        buttonsPanel.addElement(detailsButton);
-        buttonsPanel.addElement(logButton);
-        buttonsPanel.addGlue();
-        buttonsPanel.addElement(cancelButton);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(30, 13, 13, 13));
-
-        logScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        logText.setBackground(getBackground());
-        logText.setEditable(false);
-        logText.setLineWrap(true);
-        logText.setWrapStyleWord(false);
-        logText.setFont(new JLabel().getFont());
-
-        progressPanel.add(label, BorderLayout.NORTH);
-        progressPanel.setBorder(BorderFactory.createEmptyBorder(13, 13, 0, 13));
-        progressPanel.add(progressBar, BorderLayout.CENTER);
-        textAreaPanel.setBorder(BorderFactory.createEmptyBorder(10, 13, 0, 13));
-        textAreaPanel.add(logScroll, BorderLayout.CENTER);
-        textAreaPanel.setPreferredSize(new Dimension(350, 200));
-
-        mainPanel.add(progressPanel, BorderLayout.NORTH);
-        mainPanel.add(textAreaPanel, BorderLayout.CENTER);
-        mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
-
-        add(TipsPanel.instance, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);
-
-        textAreaPanel.setVisible(false);
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (confirmCancel()) {
-                    cancel();
-                    dispose();
-                }
-            }
-        });
-
-        detailsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleDetails();
-            }
-        });
-
-        logButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ConsoleFrame.showMessages();
-            }
-        });
-
-        addWindowListener(new WindowAdapter() {
-        	@Override
-        	public void windowActivated(WindowEvent e) {
-        		LauncherStatus.instance.update();
-        	}
+		setResizable(false);
+		initComponents();
+		label.setText(message);
+		defaultTitle = title;
+		defaultMessage = message;
+		setCompactSize();
+		pack();
+		setLocationRelativeTo(owner);
+		this.setSize(600, 400);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				if (confirmCancel()) {
+					cancel();
+					dispose();
+				}
+			}
 		});
-    }
 
-    private boolean confirmCancel() {
-        return SwingHelper.confirmDialog(this, SharedLocale.tr("progress.confirmCancel"), SharedLocale.tr("progress.confirmCancelTitle"));
-    }
+	}
 
-    protected void cancel() {
-    }
+	private void setCompactSize() {
+		detailsButton.setText(SharedLocale.tr("progress.details"));
+		logButton.setVisible(false);
+		revalidate();
+		this.setSize(600, 400);
+	}
 
-    private void toggleDetails() {
-        if (textAreaPanel.isVisible()) {
-            textAreaPanel.setVisible(false);
-            setCompactSize();
-        } else {
-            textAreaPanel.setVisible(true);
-            setDetailsSize();
-        }
-        setLocationRelativeTo(getOwner());
-    }
+	private void setDetailsSize() {
+		detailsButton.setText(SharedLocale.tr("progress.less"));
+		logButton.setVisible(true);
+		revalidate();
+		pack();
+		this.setSize(600, 600);
+	}
 
-    public static void showProgress(final Window owner, final ObservableFuture<?> future, String title, String message) {
-        showProgress(owner, future, future, title, message);
-    }
+	private void initComponents() {
+		progressBar.setMaximum(1000);
+		progressBar.setMinimum(0);
+		progressBar.setIndeterminate(true);
+		progressBar.setPreferredSize(new Dimension(350, 18));
 
-    public static void showProgress(final Window owner, final ListenableFuture<?> future, ProgressObservable observable, String title, String message) {
-        final ProgressDialog dialog = new ProgressDialog(owner, title, message) {
-            @Override
-            protected void cancel() {
-                future.cancel(true);
-            }
-        };
+		buttonsPanel.addElement(detailsButton);
+		buttonsPanel.addElement(logButton);
+		buttonsPanel.addGlue();
+		buttonsPanel.addElement(cancelButton);
+		buttonsPanel.setBorder(BorderFactory.createEmptyBorder(30, 13, 13, 13));
 
-        lastDialogRef = new WeakReference<ProgressDialog>(dialog);
+		logScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		logText.setBackground(getBackground());
+		logText.setEditable(false);
+		logText.setLineWrap(true);
+		logText.setWrapStyleWord(false);
+		logText.setFont(new JLabel().getFont());
 
-        final Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new UpdateProgress(dialog, observable), 400, 400);
+		progressPanel.add(label, BorderLayout.NORTH);
+		progressPanel.setBorder(BorderFactory.createEmptyBorder(13, 13, 0, 13));
+		progressPanel.add(progressBar, BorderLayout.CENTER);
+		textAreaPanel.setBorder(BorderFactory.createEmptyBorder(10, 13, 0, 13));
+		textAreaPanel.add(logScroll, BorderLayout.CENTER);
+		textAreaPanel.setPreferredSize(new Dimension(350, 200));
 
-        Futures.addCallback(future, new FutureCallback<Object>() {
-            @Override
-            public void onSuccess(Object result) {
-                timer.cancel();
-                dialog.dispose();
-            }
+		mainPanel.add(progressPanel, BorderLayout.NORTH);
+		mainPanel.add(textAreaPanel, BorderLayout.CENTER);
+		mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-            @Override
-            public void onFailure(Throwable t) {
-                timer.cancel();
-                dialog.dispose();
-            }
-        }, SwingExecutor.INSTANCE);
+		add(TipsPanel.instance, BorderLayout.NORTH);
+		add(mainPanel, BorderLayout.CENTER);
 
-        dialog.setVisible(true);
-    }
+		textAreaPanel.setVisible(false);
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (confirmCancel()) {
+					cancel();
+					dispose();
+				}
+			}
+		});
 
-    public static ProgressDialog getLastDialog() {
-        WeakReference<ProgressDialog> ref = lastDialogRef;
-        if (ref != null)
+		detailsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleDetails();
+			}
+		});
+
+		logButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ConsoleFrame.showMessages();
+			}
+		});
+
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				LauncherStatus.instance.update();
+			}
+		});
+	}
+
+	private boolean confirmCancel() {
+		return SwingHelper.confirmDialog(this, SharedLocale.tr("progress.confirmCancel"),
+				SharedLocale.tr("progress.confirmCancelTitle"));
+	}
+
+	protected void cancel() {
+	}
+
+	private void toggleDetails() {
+		if (textAreaPanel.isVisible()) {
+			textAreaPanel.setVisible(false);
+			setCompactSize();
+		} else {
+			textAreaPanel.setVisible(true);
+			setDetailsSize();
+		}
+		setLocationRelativeTo(getOwner());
+	}
+
+	public static void showProgress(final Window owner, final ObservableFuture<?> future, String title,
+			String message) {
+		showProgress(owner, future, future, title, message);
+	}
+
+	public static void showProgress(final Window owner, final ListenableFuture<?> future, ProgressObservable observable,
+			String title, String message) {
+		final ProgressDialog dialog = new ProgressDialog(owner, title, message) {
+			@Override
+			protected void cancel() {
+				future.cancel(true);
+			}
+		};
+
+		lastDialogRef = new WeakReference<ProgressDialog>(dialog);
+
+		final Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new UpdateProgress(dialog, observable), 400, 400);
+
+		Futures.addCallback(future, new FutureCallback<Object>() {
+			@Override
+			public void onSuccess(Object result) {
+				timer.cancel();
+				dialog.dispose();
+			}
+
+			@Override
+			public void onFailure(Throwable t) {
+				timer.cancel();
+				dialog.dispose();
+			}
+		}, SwingExecutor.INSTANCE);
+
+		dialog.setVisible(true);
+	}
+
+	public static ProgressDialog getLastDialog() {
+		WeakReference<ProgressDialog> ref = lastDialogRef;
+		if (ref != null)
 			return ref.get();
 
-        return null;
-    }
+		return null;
+	}
 
-    private static class UpdateProgress extends TimerTask {
-        private final ProgressDialog dialog;
-        private final ProgressObservable observable;
+	private static class UpdateProgress extends TimerTask {
+		private final ProgressDialog dialog;
+		private final ProgressObservable observable;
 
-        public UpdateProgress(ProgressDialog dialog, ProgressObservable observable) {
-            this.dialog = dialog;
-            this.observable = observable;
-        }
+		public UpdateProgress(ProgressDialog dialog, ProgressObservable observable) {
+			this.dialog = dialog;
+			this.observable = observable;
+		}
 
-        @Override
-        public void run() {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    JProgressBar progressBar = dialog.progressBar;
-                    JTextArea logText = dialog.logText;
-                    JLabel label = dialog.label;
+		@Override
+		public void run() {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					JProgressBar progressBar = dialog.progressBar;
+					JTextArea logText = dialog.logText;
+					JLabel label = dialog.label;
 
-                    double progress = observable.getProgress();
-                    if (progress >= 0) {
-                        dialog.setTitle(tr("progress.percentTitle",
-                                Math.round(progress * 100 * 100) / 100.0, dialog.defaultTitle));
-                        progressBar.setValue((int) (progress * 1000));
-                        progressBar.setIndeterminate(false);
-                    } else {
-                        dialog.setTitle( dialog.defaultTitle);
-                        progressBar.setIndeterminate(true);
-                    }
+					double progress = observable.getProgress();
+					if (progress >= 0) {
+						dialog.setTitle(tr("progress.percentTitle",
+								Math.round(progress * 100 * 100) / 100.0, dialog.defaultTitle));
+						progressBar.setValue((int) (progress * 1000));
+						progressBar.setIndeterminate(false);
+					} else {
+						dialog.setTitle(dialog.defaultTitle);
+						progressBar.setIndeterminate(true);
+					}
 
-                    String status = observable.getStatus();
-                    if (status == null) {
-                        status = SharedLocale.tr("progress.defaultStatus");
-                        label.setText(dialog.defaultMessage);
-                    } else {
-                        int index = status.indexOf('\n');
-                        if (index == -1)
+					String status = observable.getStatus();
+					if (status == null) {
+						status = SharedLocale.tr("progress.defaultStatus");
+						label.setText(dialog.defaultMessage);
+					} else {
+						int index = status.indexOf('\n');
+						if (index == -1)
 							label.setText(status);
 						else
 							label.setText(status.substring(0, index));
-                    }
-                    logText.setText(status);
-                    logText.setCaretPosition(0);
-                }
-            });
-        }
-    }
+					}
+					logText.setText(status);
+					logText.setCaretPosition(0);
+				}
+			});
+		}
+	}
 
 }
