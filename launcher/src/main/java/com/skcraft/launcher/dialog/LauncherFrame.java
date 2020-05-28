@@ -136,7 +136,7 @@ public class LauncherFrame extends JFrame {
         AppleHandler.register(launcher, this);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(750, 500));
+        setMinimumSize(new Dimension(800, 600));
         initComponents();
         pack();
         setLocationRelativeTo(null);
@@ -154,8 +154,8 @@ public class LauncherFrame extends JFrame {
     private void setExpand(boolean visible) {
 		rightPane.setVisible(visible);
 		final int rightWidth = rightPane.getWidth();
-		setMinimumSize(new Dimension(visible?750:500, 500));
-		setSize(new Dimension(visible?750:750-rightWidth, getHeight()));
+		setMinimumSize(new Dimension(visible?800:600, 600));
+		setSize(new Dimension(visible?800:800-rightWidth, getHeight()));
     }
 
     private void loadTips() {
