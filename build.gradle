@@ -23,7 +23,7 @@ subprojects {
     apply plugin: 'eclipse'
 
     group = 'com.skcraft'
-    version = 'felnull.10.2.0'
+    version = 'felnull.10.2.1'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
