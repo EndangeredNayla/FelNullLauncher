@@ -120,7 +120,7 @@ public class LoginDialog extends JDialog {
 		setTitle(SharedLocale.tr("login.title"));
 		initComponents();
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setMinimumSize(new Dimension(5000, 0));
+		setMinimumSize(new Dimension(500, 0));
 		setResizable(false);
 		pack();
 		setLocationRelativeTo(owner);
